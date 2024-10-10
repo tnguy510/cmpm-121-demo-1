@@ -5,7 +5,7 @@ const app: HTMLDivElement = document.querySelector("#app")!;
 const gameName = "My Web game";
 document.title = gameName;
 
-let flexCounter : number = 0;
+let flexCounter: number = 0;
 
 //Button Section
 const bigButton = document.createElement("button");
@@ -20,15 +20,17 @@ let flexCounterText = "Flex Counter: " + flexCounter;
 flexCounterDisplay.innerHTML = flexCounterText;
 app.append(flexCounterDisplay);
 
-function modifyCounterText(){
-    flexCounterText = "Flex Counter: " + flexCounter;
+function modifyCounterText() {
+    flexCounter++;
+  flexCounterText = "Flex Counter: " + flexCounter;
 
-    flexCounterDisplay.innerHTML = flexCounterText;
-    app.append(flexCounterDisplay);
+  flexCounterDisplay.innerHTML = flexCounterText;
+  app.append(flexCounterDisplay);
 }
 
+setInterval(modifyCounterText, 1000);
+
 bigButton.addEventListener("click", () => {
-  flexCounter++;
   modifyCounterText();
   //console.log("button click " + flexCounterText);
 });
