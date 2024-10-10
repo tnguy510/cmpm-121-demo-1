@@ -5,24 +5,35 @@ const app: HTMLDivElement = document.querySelector("#app")!;
 const gameName = "My Web game";
 document.title = gameName;
 
-//let counter : number = 0;
+let flexCounter : number = 0;
 
 //Button Section
 const bigButton = document.createElement("button");
-const bigButtonText = "Button Check💪";
-//bigButton.style.backgroundColor = "grey";
-//bigButton.style.color = "black";
-//document.body.appendChild(bigButton);
+const bigButtonText = "Flex Check💪";
+
+bigButton.innerHTML = bigButtonText;
+app.append(bigButton);
+
+const flexCounterDisplay = document.createElement("flexes");
+let flexCounterText = "Flex Counter: " + flexCounter;
+
+flexCounterDisplay.innerHTML = flexCounterText;
+app.append(flexCounterDisplay);
+
+function modifyCounterText(){
+    flexCounterText = "Flex Counter: " + flexCounter;
+
+    flexCounterDisplay.innerHTML = flexCounterText;
+    app.append(flexCounterDisplay);
+}
+
 bigButton.addEventListener("click", () => {
-    console.log("button click");
-    //counter++;
+  flexCounter++;
+  modifyCounterText();
+  //console.log("button click " + flexCounterText);
 });
 
 //Header Section
 const header = document.createElement("h1");
 header.innerHTML = gameName;
 app.append(header);
-
-//const button = document.createElement("button1");
-bigButton.innerHTML = bigButtonText;
-app.append(bigButton);
