@@ -5,14 +5,17 @@ const app: HTMLDivElement = document.querySelector("#app")!;
 const gameName = "My Web game";
 document.title = gameName;
 
+//let counter : number = 0;
+
 //Button Section
-const bigButton = document.createElement('bigButton');
-const bigButtonText = 'Button Check💪';
-bigButton.style.backgroundColor = 'grey';
-bigButton.style.color = 'black';
+const bigButton = document.createElement("button");
+const bigButtonText = "Button Check💪";
+//bigButton.style.backgroundColor = "grey";
+//bigButton.style.color = "black";
 //document.body.appendChild(bigButton);
-bigButton.addEventListener('click', () => {
-    console.log('button click');
+bigButton.addEventListener("click", () => {
+    console.log("button click");
+    //counter++;
 });
 
 //Header Section
