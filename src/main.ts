@@ -6,8 +6,10 @@ const gameName = "My Web game";
 document.title = gameName;
 
 let flexCounter: number = 0;
+let flexRate: number = 0;
 //let currentTime: number = performance.timeOrigin + performance.now();
-let lastUpdatedTime: number;
+let lastUpdatedTime: number = 0;
+let accumulator: number = 0;
 
 //Button Section
 const bigButton = document.createElement("button");
@@ -15,6 +17,14 @@ const bigButtonText = "Flex Check💪";
 
 bigButton.innerHTML = bigButtonText;
 app.append(bigButton);
+
+const upgradeButton = document.createElement("button");
+const upgradeButtonText = "Automatic Reps";
+
+upgradeButton.innerHTML = upgradeButtonText;
+app.append(upgradeButton);
+
+upgradeButton.disabled = true;
 
 const flexCounterDisplay = document.createElement("flexes");
 let flexCounterText = "Flex Counter: " + flexCounter;
@@ -25,30 +35,40 @@ app.append(flexCounterDisplay);
 function modifyCounterText() {
   flexCounter++;
   flexCounterText = "Flex Counter: " + flexCounter;
-
   flexCounterDisplay.innerHTML = flexCounterText;
-  app.append(flexCounterDisplay);
+  //app.append(flexCounterDisplay);
 }
 
 //setInterval(modifyCounterText, 1000);
 
 function moveTime(timestamp: number){
-  if(lastUpdatedTime === undefined){
-    lastUpdatedTime = timestamp;
-  }
-  if(timestamp - lastUpdatedTime >= 1000){
-    lastUpdatedTime = timestamp;
-    console.log("I am inside the if statement");
+  const deltaTime = timestamp - lastUpdatedTime;
+  lastUpdatedTime = timestamp;
+
+  accumulator += deltaTime;
+
+  if(accumulator >= 1000 / flexRate && flexRate > 0){
     modifyCounterText();
+    accumulator -= 1000 / flexRate;
   }
-  //currentTime = performance.timeOrigin + performance.now();
-  //console.log("Current difference is: " + (timestamp - lastUpdatedTime));
+
+  if(flexCounter >= 10){
+    upgradeButton.disabled = false;
+  }
+  if(flexCounter < 10){
+    upgradeButton.disabled = true;
+  }
   requestAnimationFrame(moveTime);
 }
 
 bigButton.addEventListener("click", () => {
   modifyCounterText();
   //console.log("button click " + flexCounterText);
+});
+
+upgradeButton.addEventListener("click", () => {
+  flexCounter -= 10;
+  flexRate++;
 });
 
 requestAnimationFrame(moveTime);
