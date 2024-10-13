@@ -15,10 +15,13 @@ let upgrade1Amount: number = 0;
 let upgrade2Amount: number = 0;
 let upgrade3Amount: number = 0;
 
+let upgrade1Price: number = 10;
+let upgrade2Price: number = 100;
+let upgrade3Price: number = 1000;
+
 //Test section
 //const bottomHalf = document.createElement('div');
 //bottomHalf.setAttribute("style", " max-width: 1280px; margin: 0 auto; text-align: left;");
-
 
 //Button Section
 const bigButton = document.createElement("button");
@@ -37,7 +40,7 @@ upgradeButtonTier1.disabled = true;
 
 //1st Button Counter
 const upgradeButtonTier1Amount = document.createElement("flexes");
-let upgradeButtonTier1TextAmount = "Automatic Reps 1 Amount: "+ upgrade1Amount;
+let upgradeButtonTier1TextAmount = "Automatic Reps 1 Amount: " + upgrade1Amount;
 
 upgradeButtonTier1Amount.innerHTML = upgradeButtonTier1TextAmount;
 app.append(upgradeButtonTier1Amount);
@@ -52,7 +55,7 @@ upgradeButtonTier2.disabled = true;
 
 //2nd Button Counter
 const upgradeButtonTier2Amount = document.createElement("flexes");
-let upgradeButtonTier2TextAmount = "Automatic Reps 2 Amount: "+ upgrade2Amount;
+let upgradeButtonTier2TextAmount = "Automatic Reps 2 Amount: " + upgrade2Amount;
 
 upgradeButtonTier2Amount.innerHTML = upgradeButtonTier2TextAmount;
 app.append(upgradeButtonTier2Amount);
@@ -67,7 +70,7 @@ upgradeButtonTier3.disabled = true;
 
 //3rd Button Counter
 const upgradeButtonTier3Amount = document.createElement("flexes");
-let upgradeButtonTier3TextAmount = "Automatic Reps 3 Amount: "+ upgrade3Amount;
+let upgradeButtonTier3TextAmount = "Automatic Reps 3 Amount: " + upgrade3Amount;
 
 upgradeButtonTier3Amount.innerHTML = upgradeButtonTier3TextAmount;
 app.append(upgradeButtonTier3Amount);
@@ -79,15 +82,15 @@ let flexCounterText = "Flex Counter: " + flexCounter;
 flexCounterDisplay.innerHTML = flexCounterText;
 app.append(flexCounterDisplay);
 
-//Upgrade Button 3 Text
-function modifyUpgradeText(){
-  upgradeButtonTier1TextAmount = "Automatic Reps 1 Amount: "+ upgrade1Amount;
+//Upgrade Modify Text
+function modifyUpgradeText() {
+  upgradeButtonTier1TextAmount = "Automatic Reps 1 Amount: " + upgrade1Amount;
   upgradeButtonTier1Amount.innerHTML = upgradeButtonTier1TextAmount;
 
-  upgradeButtonTier2TextAmount = "Automatic Reps 2 Amount: "+ upgrade2Amount;
+  upgradeButtonTier2TextAmount = "Automatic Reps 2 Amount: " + upgrade2Amount;
   upgradeButtonTier2Amount.innerHTML = upgradeButtonTier2TextAmount;
 
-  upgradeButtonTier3TextAmount = "Automatic Reps 3 Amount: "+ upgrade3Amount;
+  upgradeButtonTier3TextAmount = "Automatic Reps 3 Amount: " + upgrade3Amount;
   upgradeButtonTier3Amount.innerHTML = upgradeButtonTier3TextAmount;
 }
 
@@ -98,9 +101,9 @@ function modifyCounterText() {
   //app.append(flexCounterDisplay);
 }
 
-function autoModifyCounter(rateAmount: number){
+function autoModifyCounter(rateAmount: number) {
   flexCounter += rateAmount;
-  flexCounter = Math.round(flexCounter * 10) / 10
+  flexCounter = Math.round(flexCounter * 100) / 100;
   //console.log(flexCounter);
 }
 
@@ -111,12 +114,11 @@ let statusText = flexRate + " flexes per sec";
 statusDisplay.innerHTML = statusText;
 app.append(statusDisplay);
 
-function statusTextDisplay(){
-  flexRate = Math.round(flexRate * 10) / 10
+function statusTextDisplay() {
+  flexRate = Math.round(flexRate * 100) / 100;
   statusText = flexRate + " flexes per sec";
   statusDisplay.innerHTML = statusText;
 }
-
 
 //Basically the Update Function
 function moveTime(timestamp: number) {
@@ -132,26 +134,26 @@ function moveTime(timestamp: number) {
   }
 
   //Flex Upgrade Check 1
-  if (flexCounter >= 10) {
+  if (flexCounter >= upgrade1Price) {
     upgradeButtonTier1.disabled = false;
   }
-  if (flexCounter < 10) {
+  if (flexCounter < upgrade1Price) {
     upgradeButtonTier1.disabled = true;
   }
 
   //Flex Upgrade Check 2
-  if (flexCounter >= 100) {
+  if (flexCounter >= upgrade2Price) {
     upgradeButtonTier2.disabled = false;
   }
-  if (flexCounter < 100) {
+  if (flexCounter < upgrade2Price) {
     upgradeButtonTier2.disabled = true;
   }
 
   //Flex Upgrade Check 3
-  if (flexCounter >= 1000) {
+  if (flexCounter >= upgrade3Price) {
     upgradeButtonTier3.disabled = false;
   }
-  if (flexCounter < 1000) {
+  if (flexCounter < upgrade3Price) {
     upgradeButtonTier3.disabled = true;
   }
 
@@ -166,27 +168,34 @@ bigButton.addEventListener("click", () => {
 
 //The Upgrade Button Clickers
 upgradeButtonTier1.addEventListener("click", () => {
-  flexCounter -= 10.0;
+  flexCounter -= upgrade1Price;
   flexRate += 0.1;
   upgrade1Amount++;
+  upgrade1Price *= 1.15;
+  upgrade1Price = Math.round(upgrade1Price * 100) / 100;
+  console.log(upgrade1Price);
   modifyUpgradeText();
   statusTextDisplay();
   modifyCounterText();
 });
 
 upgradeButtonTier2.addEventListener("click", () => {
-  flexCounter -= 100.0;
+  flexCounter -= upgrade2Price;
   flexRate += 2;
   upgrade2Amount++;
+  upgrade2Price *= 1.15;
+  upgrade2Price = Math.round(upgrade1Price * 100) / 100;
   modifyUpgradeText();
   statusTextDisplay();
   modifyCounterText();
 });
 
 upgradeButtonTier3.addEventListener("click", () => {
-  flexCounter -= 1000.0;
+  flexCounter -= upgrade3Price;
   flexRate += 50;
   upgrade3Amount++;
+  upgrade3Price *= 1.15;
+  upgrade3Price = Math.round(upgrade1Price * 100) / 100;
   modifyUpgradeText();
   statusTextDisplay();
   modifyCounterText();
