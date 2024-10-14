@@ -10,19 +10,23 @@ const header = document.createElement("h1");
 header.innerHTML = gameName;
 app.append(header);
 
+interface Item {
+  name: string,
+  cost: number,
+  rate: number,
+  numBought: number
+};
+
+const availableItems : Item[] = [
+  {name: "Fish Jerky", cost: 10, rate: 0.1, numBought: 0},
+  {name: "Protein Shakes", cost: 100, rate: 2, numBought: 0},
+  {name: "Steroids", cost: 1000, rate: 50, numBought: 0},
+];
+
 let flexCounter: number = 0.0;
 let flexRate: number = 0.0;
-//let currentTime: number = performance.timeOrigin + performance.now();
 let lastUpdatedTime: number = 0;
 let accumulator: number = 0;
-
-let upgrade1Amount: number = 0;
-let upgrade2Amount: number = 0;
-let upgrade3Amount: number = 0;
-
-let upgrade1Price: number = 10;
-let upgrade2Price: number = 100;
-let upgrade3Price: number = 1000;
 
 //Div section
 const bottomLeftHalf = document.createElement('div');
@@ -49,48 +53,40 @@ app.append(bigButton);
 
 //Upgrade Button 1
 const upgradeButtonTier1 = document.createElement("button");
-const upgradeButtonTier1Text = "Fish Jerky";
-
-upgradeButtonTier1.innerHTML = upgradeButtonTier1Text;
-bottomLeftHalf.append(upgradeButtonTier1);
-upgradeButtonTier1.disabled = true;
-
 //1st Button Counter
 const upgradeButtonTier1Amount = document.createElement("flexes");
-let upgradeButtonTier1TextAmount = "Fish Jerky Bought: " + upgrade1Amount;
-
-upgradeButtonTier1Amount.innerHTML = upgradeButtonTier1TextAmount;
-bottomRightHalf.append(upgradeButtonTier1Amount);
 
 //The Second Button
 const upgradeButtonTier2 = document.createElement("button");
-const upgradeButtonTier2Text = "Protein Shakes";
-
-upgradeButtonTier2.innerHTML = upgradeButtonTier2Text;
-bottomLeftHalf.append(upgradeButtonTier2);
-upgradeButtonTier2.disabled = true;
-
 //2nd Button Counter
 const upgradeButtonTier2Amount = document.createElement("flexes");
-let upgradeButtonTier2TextAmount = "Protein Shakes Bought: " + upgrade2Amount;
-
-upgradeButtonTier2Amount.innerHTML = upgradeButtonTier2TextAmount;
-bottomRightHalf.append(upgradeButtonTier2Amount);
 
 //The Third Button
 const upgradeButtonTier3 = document.createElement("button");
-const upgradeButtonTier3Text = "Steroids";
-
-upgradeButtonTier3.innerHTML = upgradeButtonTier3Text;
-bottomLeftHalf.append(upgradeButtonTier3);
-upgradeButtonTier3.disabled = true;
-
 //3rd Button Counter
 const upgradeButtonTier3Amount = document.createElement("flexes");
-let upgradeButtonTier3TextAmount = "Steroids Bought: " + upgrade3Amount;
 
-upgradeButtonTier3Amount.innerHTML = upgradeButtonTier3TextAmount;
-bottomRightHalf.append(upgradeButtonTier3Amount);
+const upgradeButtonArray = [];
+upgradeButtonArray[0] = upgradeButtonTier1;
+upgradeButtonArray[1] = upgradeButtonTier2;
+upgradeButtonArray[2] = upgradeButtonTier3;
+
+const upgradeAmountArray:HTMLElement[] = [];
+upgradeAmountArray[0] = upgradeButtonTier1Amount;
+upgradeAmountArray[1] = upgradeButtonTier2Amount;
+upgradeAmountArray[2] = upgradeButtonTier3Amount;
+
+for(let i = 0; i < availableItems.length; i++){
+  //Upgrade Buttons
+  upgradeButtonArray[i].innerHTML = `${availableItems[i].name}: ` + availableItems[i].cost;
+  bottomLeftHalf.append(upgradeButtonArray[i]);
+  upgradeButtonArray[i].disabled = true;
+
+  //Upgrade Counters
+  const upgradeButtonTextAmount = `${availableItems[i].name} Bought: ` + availableItems[i].numBought;
+  upgradeAmountArray[i].innerHTML = upgradeButtonTextAmount;
+  bottomRightHalf.append(upgradeAmountArray[i]);
+}
 
 //Flex Counter Display
 const flexCounterDisplay = document.createElement("flexes");
@@ -100,15 +96,9 @@ flexCounterDisplay.innerHTML = flexCounterText;
 app.append(flexCounterDisplay);
 
 //Upgrade Modify Text
-function modifyUpgradeText() {
-  upgradeButtonTier1TextAmount = "Fish Jerky Bought: " + upgrade1Amount;
-  upgradeButtonTier1Amount.innerHTML = upgradeButtonTier1TextAmount;
-
-  upgradeButtonTier2TextAmount = "Protein Shakes Bought: " + upgrade2Amount;
-  upgradeButtonTier2Amount.innerHTML = upgradeButtonTier2TextAmount;
-
-  upgradeButtonTier3TextAmount = "Steroids Bought: " + upgrade3Amount;
-  upgradeButtonTier3Amount.innerHTML = upgradeButtonTier3TextAmount;
+function modifyUpgradeText(i: number) {
+  const upgradeButtonTextAmount = `${availableItems[i].name} Bought: ` + availableItems[i].numBought;
+  upgradeAmountArray[i].innerHTML = upgradeButtonTextAmount;
 }
 
 //Counter Text Functions
@@ -151,26 +141,26 @@ function moveTime(timestamp: number) {
   }
 
   //Flex Upgrade Check 1
-  if (flexCounter >= upgrade1Price) {
+  if (flexCounter >= availableItems[0].cost) {
     upgradeButtonTier1.disabled = false;
   }
-  if (flexCounter < upgrade1Price) {
+  if (flexCounter < availableItems[0].cost) {
     upgradeButtonTier1.disabled = true;
   }
 
   //Flex Upgrade Check 2
-  if (flexCounter >= upgrade2Price) {
+  if (flexCounter >= availableItems[1].cost) {
     upgradeButtonTier2.disabled = false;
   }
-  if (flexCounter < upgrade2Price) {
+  if (flexCounter < availableItems[1].cost) {
     upgradeButtonTier2.disabled = true;
   }
 
   //Flex Upgrade Check 3
-  if (flexCounter >= upgrade3Price) {
+  if (flexCounter >= availableItems[2].cost) {
     upgradeButtonTier3.disabled = false;
   }
-  if (flexCounter < upgrade3Price) {
+  if (flexCounter < availableItems[2].cost) {
     upgradeButtonTier3.disabled = true;
   }
 
@@ -180,41 +170,39 @@ function moveTime(timestamp: number) {
 bigButton.addEventListener("click", () => {
   flexCounter++;
   modifyCounterText();
-  //console.log("button click " + flexCounterText);
 });
 
 //The Upgrade Button Clickers
 upgradeButtonTier1.addEventListener("click", () => {
-  flexCounter -= upgrade1Price;
-  flexRate += 0.1;
-  upgrade1Amount++;
-  upgrade1Price *= 1.15;
-  upgrade1Price = Math.round(upgrade1Price * 100) / 100;
+  flexCounter -= availableItems[0].cost;
+  flexRate += availableItems[0].rate;
+  availableItems[0].numBought++;
+  availableItems[0].cost *= 1.15;
+  availableItems[0].cost = Math.round(availableItems[0].cost * 100) / 100;
   //console.log(upgrade1Price);
-  modifyUpgradeText();
+  modifyUpgradeText(0);
   statusTextDisplay();
   modifyCounterText();
 });
 
 upgradeButtonTier2.addEventListener("click", () => {
-  flexCounter -= upgrade2Price;
-  flexRate += 2;
-  upgrade2Amount++;
-  upgrade2Price *= 1.15;
-  upgrade2Price = Math.round(upgrade2Price * 100) / 100;
-  console.log(upgrade2Price)
-  modifyUpgradeText();
+  flexCounter -= availableItems[1].cost;
+  flexRate += availableItems[1].rate;
+  availableItems[1].numBought++;
+  availableItems[1].cost *= 1.15;
+  availableItems[1].cost = Math.round(availableItems[1].cost * 100) / 100;
+  modifyUpgradeText(1);
   statusTextDisplay();
   modifyCounterText();
 });
 
 upgradeButtonTier3.addEventListener("click", () => {
-  flexCounter -= upgrade3Price;
-  flexRate += 50;
-  upgrade3Amount++;
-  upgrade3Price *= 1.15;
-  upgrade3Price = Math.round(upgrade3Price * 100) / 100;
-  modifyUpgradeText();
+  flexCounter -= availableItems[2].cost;
+  flexRate += availableItems[2].rate;
+  availableItems[2].numBought++;
+  availableItems[2].cost *= 1.15;
+  availableItems[2].cost = Math.round(availableItems[2].cost * 100) / 100;
+  modifyUpgradeText(2);
   statusTextDisplay();
   modifyCounterText();
 });
