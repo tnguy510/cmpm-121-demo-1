@@ -11,16 +11,19 @@ header.innerHTML = gameName;
 app.append(header);
 
 interface Item {
-  name: string,
-  cost: number,
-  rate: number,
-  numBought: number
-};
+  name: string;
+  cost: number;
+  rate: number;
+  numBought: number;
+  description: string;
+}
 
-const availableItems : Item[] = [
-  {name: "Fish Jerky", cost: 10, rate: 0.1, numBought: 0},
-  {name: "Protein Shakes", cost: 100, rate: 2, numBought: 0},
-  {name: "Steroids", cost: 1000, rate: 50, numBought: 0},
+const availableItems: Item[] = [
+  { name: "Fish Jerky", cost: 10, rate: 0.1, numBought: 0, description: 'Chewy and full of nutrients'},
+  { name: "Pre Workout", cost: 50, rate: 0.5, numBought: 0, description: 'That good powder stuff'},
+  { name: "Protein Shakes", cost: 100, rate: 2, numBought: 0, description: 'A drinkable meal'},
+  { name: "Costco Chicken", cost: 500, rate: 10, numBought: 0, description: 'Carbs for those gains'},
+  { name: "Steroids", cost: 1000, rate: 50, numBought: 0, description: 'Even professionals use them!'},
 ];
 
 let flexCounter: number = 0.0;
@@ -29,24 +32,24 @@ let lastUpdatedTime: number = 0;
 let accumulator: number = 0;
 
 //Div section
-const bottomLeftHalf = document.createElement('div');
-bottomLeftHalf.style.setProperty('position', 'fixed')
-bottomLeftHalf.style.setProperty('bottom', '10px')
-bottomLeftHalf.style.setProperty('left', '10px')
+const bottomLeftHalf = document.createElement("div");
+bottomLeftHalf.style.setProperty("position", "fixed");
+bottomLeftHalf.style.setProperty("bottom", "10px");
+bottomLeftHalf.style.setProperty("left", "10px");
 app.append(bottomLeftHalf);
 
-const bottomRightHalf = document.createElement('div');
-bottomRightHalf.style.setProperty('position', 'fixed')
-bottomRightHalf.style.setProperty('bottom', '10px')
-bottomRightHalf.style.setProperty('right', '10px')
+const bottomRightHalf = document.createElement("div");
+bottomRightHalf.style.setProperty("position", "fixed");
+bottomRightHalf.style.setProperty("bottom", "10px");
+bottomRightHalf.style.setProperty("right", "10px");
 app.append(bottomRightHalf);
 
 //Button Section
 const bigButton = document.createElement("button");
 const bigButtonText = "💪";
-bigButton.style.setProperty('font-size', '5em');
-bigButton.style.setProperty('position', 'fixed')
-bigButton.style.setProperty('top', '0')
+bigButton.style.setProperty("font-size", "5em");
+bigButton.style.setProperty("position", "fixed");
+bigButton.style.setProperty("top", "0");
 
 bigButton.innerHTML = bigButtonText;
 app.append(bigButton);
@@ -66,24 +69,40 @@ const upgradeButtonTier3 = document.createElement("button");
 //3rd Button Counter
 const upgradeButtonTier3Amount = document.createElement("flexes");
 
+//The Fourth Button
+const upgradeButtonTier4 = document.createElement("button");
+//4th Button Counter
+const upgradeButtonTier4Amount = document.createElement("flexes");
+
+//The Fifth Button
+const upgradeButtonTier5 = document.createElement("button");
+//5th Button Counter
+const upgradeButtonTier5Amount = document.createElement("flexes");
+
 const upgradeButtonArray = [];
 upgradeButtonArray[0] = upgradeButtonTier1;
 upgradeButtonArray[1] = upgradeButtonTier2;
 upgradeButtonArray[2] = upgradeButtonTier3;
+upgradeButtonArray[3] = upgradeButtonTier4;
+upgradeButtonArray[4] = upgradeButtonTier5;
 
-const upgradeAmountArray:HTMLElement[] = [];
+const upgradeAmountArray: HTMLElement[] = [];
 upgradeAmountArray[0] = upgradeButtonTier1Amount;
 upgradeAmountArray[1] = upgradeButtonTier2Amount;
 upgradeAmountArray[2] = upgradeButtonTier3Amount;
+upgradeAmountArray[3] = upgradeButtonTier4Amount;
+upgradeAmountArray[4] = upgradeButtonTier5Amount;
 
-for(let i = 0; i < availableItems.length; i++){
+for (let i = 0; i < availableItems.length; i++) {
   //Upgrade Buttons
-  upgradeButtonArray[i].innerHTML = `${availableItems[i].name}: ` + availableItems[i].cost;
+  upgradeButtonArray[i].innerHTML =
+    `${availableItems[i].name}: ` + availableItems[i].cost;
   bottomLeftHalf.append(upgradeButtonArray[i]);
   upgradeButtonArray[i].disabled = true;
 
   //Upgrade Counters
-  const upgradeButtonTextAmount = `${availableItems[i].name} Bought: ` + availableItems[i].numBought;
+  const upgradeButtonTextAmount =
+    `${availableItems[i].name} Bought: ` + availableItems[i].numBought;
   upgradeAmountArray[i].innerHTML = upgradeButtonTextAmount;
   bottomRightHalf.append(upgradeAmountArray[i]);
 }
@@ -97,7 +116,8 @@ app.append(flexCounterDisplay);
 
 //Upgrade Modify Text
 function modifyUpgradeText(i: number) {
-  const upgradeButtonTextAmount = `${availableItems[i].name} Bought: ` + availableItems[i].numBought;
+  const upgradeButtonTextAmount =
+    `${availableItems[i].name} Bought: ` + availableItems[i].numBought;
   upgradeAmountArray[i].innerHTML = upgradeButtonTextAmount;
 }
 
@@ -203,6 +223,28 @@ upgradeButtonTier3.addEventListener("click", () => {
   availableItems[2].cost *= 1.15;
   availableItems[2].cost = Math.round(availableItems[2].cost * 100) / 100;
   modifyUpgradeText(2);
+  statusTextDisplay();
+  modifyCounterText();
+});
+
+upgradeButtonTier4.addEventListener("click", () => {
+  flexCounter -= availableItems[3].cost;
+  flexRate += availableItems[3].rate;
+  availableItems[3].numBought++;
+  availableItems[3].cost *= 1.15;
+  availableItems[3].cost = Math.round(availableItems[3].cost * 100) / 100;
+  modifyUpgradeText(3);
+  statusTextDisplay();
+  modifyCounterText();
+});
+
+upgradeButtonTier5.addEventListener("click", () => {
+  flexCounter -= availableItems[4].cost;
+  flexRate += availableItems[4].rate;
+  availableItems[4].numBought++;
+  availableItems[4].cost *= 1.15;
+  availableItems[4].cost = Math.round(availableItems[4].cost * 100) / 100;
+  modifyUpgradeText(4);
   statusTextDisplay();
   modifyCounterText();
 });
