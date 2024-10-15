@@ -10,20 +10,46 @@ const header = document.createElement("h1");
 header.innerHTML = gameName;
 app.append(header);
 
+//Upgrade Button 1
+const upgradeButtonTier1 = document.createElement("button");
+const upgradeButtonTier1Amount = document.createElement("flexes");
+const upgrade1desc = document.createElement("div");
+
+//The Second Button
+const upgradeButtonTier2 = document.createElement("button");
+const upgradeButtonTier2Amount = document.createElement("flexes");
+const upgrade2desc = document.createElement("div");
+
+//The Third Button
+const upgradeButtonTier3 = document.createElement("button");
+const upgradeButtonTier3Amount = document.createElement("flexes");
+const upgrade3desc = document.createElement("div");
+
+//The Fourth Button
+const upgradeButtonTier4 = document.createElement("button");
+const upgradeButtonTier4Amount = document.createElement("flexes");
+const upgrade4desc = document.createElement("div");
+
+//The Fifth Button
+const upgradeButtonTier5 = document.createElement("button");
+const upgradeButtonTier5Amount = document.createElement("flexes");
+const upgrade5desc = document.createElement("div");
+
 interface Item {
   name: string;
   cost: number;
   rate: number;
   numBought: number;
-  description: string;
+  descDiv: HTMLDivElement;
+  descString: string;
 }
 
 const availableItems: Item[] = [
-  { name: "Fish Jerky", cost: 10, rate: 0.1, numBought: 0, description: 'Chewy and full of nutrients'},
-  { name: "Pre Workout", cost: 50, rate: 0.5, numBought: 0, description: 'That good powder stuff'},
-  { name: "Protein Shakes", cost: 100, rate: 2, numBought: 0, description: 'A drinkable meal'},
-  { name: "Costco Chicken", cost: 500, rate: 10, numBought: 0, description: 'Carbs for those gains'},
-  { name: "Steroids", cost: 1000, rate: 50, numBought: 0, description: 'Even professionals use them!'},
+  { name: "Fish Jerky", cost: 10, rate: 0.1, numBought: 0, descDiv: upgrade1desc, descString: 'Chewy and full of nutrients. Auto Flex by 0.1'},
+  { name: "Pre Workout", cost: 50, rate: 0.5, numBought: 0, descDiv: upgrade2desc, descString: 'That good powder stuff. Auto Flex by 0.5'},
+  { name: "Protein Shakes", cost: 100, rate: 2, numBought: 0, descDiv: upgrade3desc, descString: 'A drinkable meal. Auto Flex by 2'},
+  { name: "Costco Chicken", cost: 500, rate: 10, numBought: 0, descDiv: upgrade4desc, descString: 'Carbs for those gains. Auto Flex by 10'},
+  { name: "Steroids", cost: 1000, rate: 50, numBought: 0, descDiv: upgrade5desc, descString: 'Even professionals use them! Auto Flex by 50'},
 ];
 
 let flexCounter: number = 0.0;
@@ -54,30 +80,6 @@ bigButton.style.setProperty("top", "0");
 bigButton.innerHTML = bigButtonText;
 app.append(bigButton);
 
-//Upgrade Button 1
-const upgradeButtonTier1 = document.createElement("button");
-//1st Button Counter
-const upgradeButtonTier1Amount = document.createElement("flexes");
-
-//The Second Button
-const upgradeButtonTier2 = document.createElement("button");
-//2nd Button Counter
-const upgradeButtonTier2Amount = document.createElement("flexes");
-
-//The Third Button
-const upgradeButtonTier3 = document.createElement("button");
-//3rd Button Counter
-const upgradeButtonTier3Amount = document.createElement("flexes");
-
-//The Fourth Button
-const upgradeButtonTier4 = document.createElement("button");
-//4th Button Counter
-const upgradeButtonTier4Amount = document.createElement("flexes");
-
-//The Fifth Button
-const upgradeButtonTier5 = document.createElement("button");
-//5th Button Counter
-const upgradeButtonTier5Amount = document.createElement("flexes");
 
 const upgradeButtonArray = [];
 upgradeButtonArray[0] = upgradeButtonTier1;
@@ -97,14 +99,17 @@ for (let i = 0; i < availableItems.length; i++) {
   //Upgrade Buttons
   upgradeButtonArray[i].innerHTML =
     `${availableItems[i].name}: ` + availableItems[i].cost;
-  bottomLeftHalf.append(upgradeButtonArray[i]);
+  bottomLeftHalf.appendChild(upgradeButtonArray[i]);
   upgradeButtonArray[i].disabled = true;
+
+  availableItems[i].descDiv.innerHTML = availableItems[i].descString;
+  bottomLeftHalf.appendChild(availableItems[i].descDiv);
 
   //Upgrade Counters
   const upgradeButtonTextAmount =
     `${availableItems[i].name} Bought: ` + availableItems[i].numBought;
   upgradeAmountArray[i].innerHTML = upgradeButtonTextAmount;
-  bottomRightHalf.append(upgradeAmountArray[i]);
+  bottomRightHalf.appendChild(upgradeAmountArray[i]);
 }
 
 //Flex Counter Display
@@ -123,7 +128,7 @@ function modifyUpgradeText(i: number) {
 
 //Counter Text Functions
 function modifyCounterText() {
-  flexCounterText = "Flexes Completed: " + flexCounter;
+  flexCounterText = "Flexes Completed: " + flexCounter.toFixed(1);
   flexCounterDisplay.innerHTML = flexCounterText;
   //app.append(flexCounterDisplay);
 }
@@ -143,7 +148,7 @@ app.append(statusDisplay);
 
 function statusTextDisplay() {
   flexRate = Math.round(flexRate * 100) / 100;
-  statusText = flexRate + " flexes per sec";
+  statusText = flexRate.toFixed(1) + " flexes per sec";
   statusDisplay.innerHTML = statusText;
 }
 
