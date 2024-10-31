@@ -10,6 +10,15 @@ const header = document.createElement("h1");
 header.innerHTML = gameName;
 app.append(header);
 
+//Button Section
+const flexButton = document.createElement("button");
+const flexButtonText = "💪";
+flexButton.innerHTML = flexButtonText;
+flexButton.style.fontSize = "96px";
+flexButton.style.setProperty("position", "fixed");
+flexButton.style.setProperty("top", "64px");
+app.append(flexButton);
+
 //Upgrade Button 1
 const upgradeButtonTier1 = document.createElement("button");
 const upgradeButtonTier1Amount = document.createElement("flexes");
@@ -34,6 +43,9 @@ const upgrade4desc = document.createElement("div");
 const upgradeButtonTier5 = document.createElement("button");
 const upgradeButtonTier5Amount = document.createElement("flexes");
 const upgrade5desc = document.createElement("div");
+
+const blankDiv = document.createElement("div");
+blankDiv.innerHTML = "";
 
 interface Item {
   name: string;
@@ -106,12 +118,6 @@ bottomRightHalf.style.setProperty("bottom", "10px");
 bottomRightHalf.style.setProperty("right", "10px");
 app.append(bottomRightHalf);
 
-//Button Section
-const flexButton = document.createElement("button");
-const flexButtonText = "💪";
-flexButton.style.setProperty("font-size", "5em");
-flexButton.style.setProperty("position", "fixed");
-flexButton.style.setProperty("top", "0");
 
 flexButton.innerHTML = flexButtonText;
 app.append(flexButton);
@@ -127,16 +133,19 @@ for (let i = 0; i < availableItems.length; i++) {
   //Upgrade Buttons
   upgradeButtonArray[i].innerHTML =
     `${availableItems[i].name}: ` + availableItems[i].cost;
+    upgradeButtonArray[i].title = `${availableItems[i].descString}`;
+
   bottomLeftHalf.appendChild(upgradeButtonArray[i]);
   upgradeButtonArray[i].disabled = true;
   createUpgradeButtonClicker(upgradeButtonArray[i], availableItems[i], i);
 
-  availableItems[i].descDiv.innerHTML = availableItems[i].descString;
+  availableItems[i].descDiv.innerHTML = `${availableItems[i].name} Bought: ` + availableItems[i].numBought;
   bottomLeftHalf.appendChild(availableItems[i].descDiv);
 
   //Upgrade Counters
-  upgradeAmountArray[i].innerHTML = `${availableItems[i].name} Bought: ` + availableItems[i].numBought;
-  bottomRightHalf.appendChild(upgradeAmountArray[i]);
+  //upgradeAmountArray[i].innerHTML = `${availableItems[i].name} Bought: ` + availableItems[i].numBought;
+  //bottomRightHalf.appendChild(upgradeAmountArray[i]);
+  //bottomLeftHalf.appendChild(availableItems[i].descDiv);
 }
 
 function createUpgradeButtonClicker(
@@ -175,9 +184,7 @@ app.append(flexCounterDisplay);
 
 //Upgrade Modify Text
 function modifyUpgradeText(i: number) {
-  const upgradeButtonTextAmount =
-    `${availableItems[i].name} Bought: ` + availableItems[i].numBought;
-  upgradeAmountArray[i].innerHTML = upgradeButtonTextAmount;
+  availableItems[i].descDiv.innerHTML = `${availableItems[i].name} Bought: ` + availableItems[i].numBought;
 
   upgradeButtonArray[i].innerHTML =
     `${availableItems[i].name}: ` + availableItems[i].cost;
