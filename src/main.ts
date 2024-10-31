@@ -45,11 +45,46 @@ interface Item {
 }
 
 const availableItems: Item[] = [
-  { name: "Fish Jerky", cost: 10, rate: 0.1, numBought: 0, descDiv: upgrade1desc, descString: 'Chewy and full of nutrients. Auto Flex by 0.1'},
-  { name: "Pre Workout", cost: 50, rate: 0.5, numBought: 0, descDiv: upgrade2desc, descString: 'That good powder stuff. Auto Flex by 0.5'},
-  { name: "Protein Shakes", cost: 100, rate: 2, numBought: 0, descDiv: upgrade3desc, descString: 'A drinkable meal. Auto Flex by 2'},
-  { name: "Costco Chicken", cost: 500, rate: 10, numBought: 0, descDiv: upgrade4desc, descString: 'Carbs for those gains. Auto Flex by 10'},
-  { name: "Steroids", cost: 1000, rate: 50, numBought: 0, descDiv: upgrade5desc, descString: 'Even professionals use them! Auto Flex by 50'},
+  {
+    name: "Fish Jerky",
+    cost: 10,
+    rate: 0.1,
+    numBought: 0,
+    descDiv: upgrade1desc,
+    descString: "Chewy and full of nutrients. Auto Flex by 0.1",
+  },
+  {
+    name: "Pre Workout",
+    cost: 50,
+    rate: 0.5,
+    numBought: 0,
+    descDiv: upgrade2desc,
+    descString: "That good powder stuff. Auto Flex by 0.5",
+  },
+  {
+    name: "Protein Shakes",
+    cost: 100,
+    rate: 2,
+    numBought: 0,
+    descDiv: upgrade3desc,
+    descString: "A drinkable meal. Auto Flex by 2",
+  },
+  {
+    name: "Costco Chicken",
+    cost: 500,
+    rate: 10,
+    numBought: 0,
+    descDiv: upgrade4desc,
+    descString: "Carbs for those gains. Auto Flex by 10",
+  },
+  {
+    name: "Steroids",
+    cost: 1000,
+    rate: 50,
+    numBought: 0,
+    descDiv: upgrade5desc,
+    descString: "Even professionals use them! Auto Flex by 50",
+  },
 ];
 
 let flexCounter: number = 0.0;
@@ -80,7 +115,6 @@ flexButton.style.setProperty("top", "0");
 flexButton.innerHTML = flexButtonText;
 app.append(flexButton);
 
-
 const upgradeButtonArray: HTMLButtonElement[] = [];
 upgradeButtonArray[0] = upgradeButtonTier1;
 upgradeButtonArray[1] = upgradeButtonTier2;
@@ -101,7 +135,7 @@ for (let i = 0; i < availableItems.length; i++) {
     `${availableItems[i].name}: ` + availableItems[i].cost;
   bottomLeftHalf.appendChild(upgradeButtonArray[i]);
   upgradeButtonArray[i].disabled = true;
-  createUpgradeButton(upgradeButtonArray[i], availableItems[i], i);
+  createUpgradeButtonClicker(upgradeButtonArray[i], availableItems[i], i);
 
   availableItems[i].descDiv.innerHTML = availableItems[i].descString;
   bottomLeftHalf.appendChild(availableItems[i].descDiv);
@@ -113,7 +147,11 @@ for (let i = 0; i < availableItems.length; i++) {
   bottomRightHalf.appendChild(upgradeAmountArray[i]);
 }
 
-function createUpgradeButton(upgradeButton: HTMLButtonElement, currentItem: Item, itemNum: number){
+function createUpgradeButtonClicker(
+  upgradeButton: HTMLButtonElement,
+  currentItem: Item,
+  itemNum: number,
+) {
   //const upgradeButton = document.createElement("button");
   //upgradeButton.innerHTML = `${currentItem.name}: ` + currentItem.cost;
   //bottomLeftHalf.append(upgradeButton);
@@ -131,7 +169,6 @@ function createUpgradeButton(upgradeButton: HTMLButtonElement, currentItem: Item
   });
 }
 
-
 //Flex Counter Display
 const flexCounterDisplay = document.createElement("flexes");
 let flexCounterText = "Flexes Completed: " + flexCounter;
@@ -145,7 +182,8 @@ function modifyUpgradeText(i: number) {
     `${availableItems[i].name} Bought: ` + availableItems[i].numBought;
   upgradeAmountArray[i].innerHTML = upgradeButtonTextAmount;
 
-  upgradeButtonArray[i].innerHTML = `${availableItems[i].name}: ` + availableItems[i].cost;;
+  upgradeButtonArray[i].innerHTML =
+    `${availableItems[i].name}: ` + availableItems[i].cost;
 }
 
 //Counter Text Functions
@@ -159,6 +197,16 @@ function autoModifyCounter(rateAmount: number) {
   flexCounter += rateAmount;
   flexCounter = Math.round(flexCounter * 100) / 100;
   //console.log(flexCounter);
+}
+
+//Checks that there is enough currency to buy a certain upgrade and disables/enables it respectively
+function checkCost(arrayPosition: number) {
+  if (flexCounter >= availableItems[arrayPosition].cost) {
+    upgradeButtonArray[arrayPosition].disabled = false;
+  }
+  if (flexCounter < availableItems[arrayPosition].cost) {
+    upgradeButtonArray[arrayPosition].disabled = true;
+  }
 }
 
 //Status Display
@@ -187,28 +235,8 @@ function moveTime(timestamp: number) {
     accumulator -= 100 / flexRate;
   }
 
-  //Flex Upgrade Check 1
-  if (flexCounter >= availableItems[0].cost) {
-    upgradeButtonTier1.disabled = false;
-  }
-  if (flexCounter < availableItems[0].cost) {
-    upgradeButtonTier1.disabled = true;
-  }
-
-  //Flex Upgrade Check 2
-  if (flexCounter >= availableItems[1].cost) {
-    upgradeButtonTier2.disabled = false;
-  }
-  if (flexCounter < availableItems[1].cost) {
-    upgradeButtonTier2.disabled = true;
-  }
-
-  //Flex Upgrade Check 3
-  if (flexCounter >= availableItems[2].cost) {
-    upgradeButtonTier3.disabled = false;
-  }
-  if (flexCounter < availableItems[2].cost) {
-    upgradeButtonTier3.disabled = true;
+  for (let i = 0; i < availableItems.length; i++) {
+    checkCost(i);
   }
 
   requestAnimationFrame(moveTime);
