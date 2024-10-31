@@ -45,14 +45,14 @@ bottomRightHalf.style.setProperty("right", "10px");
 app.append(bottomRightHalf);
 
 //Button Section
-const bigButton = document.createElement("button");
-const bigButtonText = "💪";
-bigButton.style.setProperty("font-size", "5em");
-bigButton.style.setProperty("position", "fixed");
-bigButton.style.setProperty("top", "0");
+const flexButton = document.createElement("button");
+const flexButtonText = "💪";
+flexButton.style.setProperty("font-size", "5em");
+flexButton.style.setProperty("position", "fixed");
+flexButton.style.setProperty("top", "0");
 
-bigButton.innerHTML = bigButtonText;
-app.append(bigButton);
+flexButton.innerHTML = flexButtonText;
+app.append(flexButton);
 
 //Upgrade Button 1
 const upgradeButtonTier1 = document.createElement("button");
@@ -79,7 +79,7 @@ const upgradeButtonTier5 = document.createElement("button");
 //5th Button Counter
 const upgradeButtonTier5Amount = document.createElement("flexes");
 
-const upgradeButtonArray = [];
+const upgradeButtonArray: HTMLButtonElement[] = [];
 upgradeButtonArray[0] = upgradeButtonTier1;
 upgradeButtonArray[1] = upgradeButtonTier2;
 upgradeButtonArray[2] = upgradeButtonTier3;
@@ -99,6 +99,7 @@ for (let i = 0; i < availableItems.length; i++) {
     `${availableItems[i].name}: ` + availableItems[i].cost;
   bottomLeftHalf.append(upgradeButtonArray[i]);
   upgradeButtonArray[i].disabled = true;
+  createUpgradeButton(upgradeButtonArray[i], availableItems[i], i);
 
   //Upgrade Counters
   const upgradeButtonTextAmount =
@@ -106,6 +107,25 @@ for (let i = 0; i < availableItems.length; i++) {
   upgradeAmountArray[i].innerHTML = upgradeButtonTextAmount;
   bottomRightHalf.append(upgradeAmountArray[i]);
 }
+
+function createUpgradeButton(upgradeButton: HTMLButtonElement, currentItem: Item, itemNum: number){
+  //const upgradeButton = document.createElement("button");
+  //upgradeButton.innerHTML = `${currentItem.name}: ` + currentItem.cost;
+  //bottomLeftHalf.append(upgradeButton);
+  //upgradeButton.disabled = true;
+
+  upgradeButton.addEventListener("click", () => {
+    flexCounter -= currentItem.cost;
+    flexRate += currentItem.rate;
+    currentItem.numBought++;
+    currentItem.cost *= 1.15;
+    currentItem.cost = Math.round(currentItem.cost * 100) / 100;
+    modifyUpgradeText(itemNum);
+    statusTextDisplay();
+    modifyCounterText();
+  });
+}
+
 
 //Flex Counter Display
 const flexCounterDisplay = document.createElement("flexes");
@@ -119,6 +139,8 @@ function modifyUpgradeText(i: number) {
   const upgradeButtonTextAmount =
     `${availableItems[i].name} Bought: ` + availableItems[i].numBought;
   upgradeAmountArray[i].innerHTML = upgradeButtonTextAmount;
+
+  upgradeButtonArray[i].innerHTML = `${availableItems[i].name}: ` + availableItems[i].cost;;
 }
 
 //Counter Text Functions
@@ -187,65 +209,8 @@ function moveTime(timestamp: number) {
   requestAnimationFrame(moveTime);
 }
 
-bigButton.addEventListener("click", () => {
+flexButton.addEventListener("click", () => {
   flexCounter++;
-  modifyCounterText();
-});
-
-//The Upgrade Button Clickers
-upgradeButtonTier1.addEventListener("click", () => {
-  flexCounter -= availableItems[0].cost;
-  flexRate += availableItems[0].rate;
-  availableItems[0].numBought++;
-  availableItems[0].cost *= 1.15;
-  availableItems[0].cost = Math.round(availableItems[0].cost * 100) / 100;
-  //console.log(upgrade1Price);
-  modifyUpgradeText(0);
-  statusTextDisplay();
-  modifyCounterText();
-});
-
-upgradeButtonTier2.addEventListener("click", () => {
-  flexCounter -= availableItems[1].cost;
-  flexRate += availableItems[1].rate;
-  availableItems[1].numBought++;
-  availableItems[1].cost *= 1.15;
-  availableItems[1].cost = Math.round(availableItems[1].cost * 100) / 100;
-  modifyUpgradeText(1);
-  statusTextDisplay();
-  modifyCounterText();
-});
-
-upgradeButtonTier3.addEventListener("click", () => {
-  flexCounter -= availableItems[2].cost;
-  flexRate += availableItems[2].rate;
-  availableItems[2].numBought++;
-  availableItems[2].cost *= 1.15;
-  availableItems[2].cost = Math.round(availableItems[2].cost * 100) / 100;
-  modifyUpgradeText(2);
-  statusTextDisplay();
-  modifyCounterText();
-});
-
-upgradeButtonTier4.addEventListener("click", () => {
-  flexCounter -= availableItems[3].cost;
-  flexRate += availableItems[3].rate;
-  availableItems[3].numBought++;
-  availableItems[3].cost *= 1.15;
-  availableItems[3].cost = Math.round(availableItems[3].cost * 100) / 100;
-  modifyUpgradeText(3);
-  statusTextDisplay();
-  modifyCounterText();
-});
-
-upgradeButtonTier5.addEventListener("click", () => {
-  flexCounter -= availableItems[4].cost;
-  flexRate += availableItems[4].rate;
-  availableItems[4].numBought++;
-  availableItems[4].cost *= 1.15;
-  availableItems[4].cost = Math.round(availableItems[4].cost * 100) / 100;
-  modifyUpgradeText(4);
-  statusTextDisplay();
   modifyCounterText();
 });
 
