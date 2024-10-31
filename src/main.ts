@@ -21,27 +21,22 @@ app.append(flexButton);
 
 //Upgrade Button 1
 const upgradeButtonTier1 = document.createElement("button");
-const upgradeButtonTier1Amount = document.createElement("flexes");
 const upgrade1desc = document.createElement("div");
 
 //The Second Button
 const upgradeButtonTier2 = document.createElement("button");
-const upgradeButtonTier2Amount = document.createElement("flexes");
 const upgrade2desc = document.createElement("div");
 
 //The Third Button
 const upgradeButtonTier3 = document.createElement("button");
-const upgradeButtonTier3Amount = document.createElement("flexes");
 const upgrade3desc = document.createElement("div");
 
 //The Fourth Button
 const upgradeButtonTier4 = document.createElement("button");
-const upgradeButtonTier4Amount = document.createElement("flexes");
 const upgrade4desc = document.createElement("div");
 
 //The Fifth Button
 const upgradeButtonTier5 = document.createElement("button");
-const upgradeButtonTier5Amount = document.createElement("flexes");
 const upgrade5desc = document.createElement("div");
 
 const blankDiv = document.createElement("div");
@@ -126,8 +121,6 @@ const upgradeButtonArray: HTMLButtonElement[] = [
   upgradeButtonTier1, upgradeButtonTier2, upgradeButtonTier3, upgradeButtonTier4, upgradeButtonTier5
 ];
 
-const upgradeAmountArray: HTMLElement[] = [
-  upgradeButtonTier1Amount, upgradeButtonTier2Amount, upgradeButtonTier3Amount, upgradeButtonTier4Amount, upgradeButtonTier5Amount];
 
 for (let i = 0; i < availableItems.length; i++) {
   //Upgrade Buttons
