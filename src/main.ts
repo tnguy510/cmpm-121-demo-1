@@ -91,6 +91,7 @@ let flexCounter: number = 0.0;
 let flexRate: number = 0.0;
 let lastUpdatedTime: number = 0;
 let accumulator: number = 0;
+const costMultiplier = 1.15;
 
 //Div section
 const bottomLeftHalf = document.createElement("div");
@@ -115,19 +116,12 @@ flexButton.style.setProperty("top", "0");
 flexButton.innerHTML = flexButtonText;
 app.append(flexButton);
 
-const upgradeButtonArray: HTMLButtonElement[] = [];
-upgradeButtonArray[0] = upgradeButtonTier1;
-upgradeButtonArray[1] = upgradeButtonTier2;
-upgradeButtonArray[2] = upgradeButtonTier3;
-upgradeButtonArray[3] = upgradeButtonTier4;
-upgradeButtonArray[4] = upgradeButtonTier5;
+const upgradeButtonArray: HTMLButtonElement[] = [
+  upgradeButtonTier1, upgradeButtonTier2, upgradeButtonTier3, upgradeButtonTier4, upgradeButtonTier5
+];
 
-const upgradeAmountArray: HTMLElement[] = [];
-upgradeAmountArray[0] = upgradeButtonTier1Amount;
-upgradeAmountArray[1] = upgradeButtonTier2Amount;
-upgradeAmountArray[2] = upgradeButtonTier3Amount;
-upgradeAmountArray[3] = upgradeButtonTier4Amount;
-upgradeAmountArray[4] = upgradeButtonTier5Amount;
+const upgradeAmountArray: HTMLElement[] = [
+  upgradeButtonTier1Amount, upgradeButtonTier2Amount, upgradeButtonTier3Amount, upgradeButtonTier4Amount, upgradeButtonTier5Amount];
 
 for (let i = 0; i < availableItems.length; i++) {
   //Upgrade Buttons
@@ -141,9 +135,7 @@ for (let i = 0; i < availableItems.length; i++) {
   bottomLeftHalf.appendChild(availableItems[i].descDiv);
 
   //Upgrade Counters
-  const upgradeButtonTextAmount =
-    `${availableItems[i].name} Bought: ` + availableItems[i].numBought;
-  upgradeAmountArray[i].innerHTML = upgradeButtonTextAmount;
+  upgradeAmountArray[i].innerHTML = `${availableItems[i].name} Bought: ` + availableItems[i].numBought;
   bottomRightHalf.appendChild(upgradeAmountArray[i]);
 }
 
@@ -161,13 +153,18 @@ function createUpgradeButtonClicker(
     flexCounter -= currentItem.cost;
     flexRate += currentItem.rate;
     currentItem.numBought++;
-    currentItem.cost *= 1.15;
+    currentItem.cost *= costMultiplier;
     currentItem.cost = Math.round(currentItem.cost * 100) / 100;
     modifyUpgradeText(itemNum);
     statusTextDisplay();
     modifyCounterText();
   });
 }
+
+flexButton.addEventListener("click", () => {
+  flexCounter++;
+  modifyCounterText();
+});
 
 //Flex Counter Display
 const flexCounterDisplay = document.createElement("flexes");
@@ -241,10 +238,5 @@ function moveTime(timestamp: number) {
 
   requestAnimationFrame(moveTime);
 }
-
-flexButton.addEventListener("click", () => {
-  flexCounter++;
-  modifyCounterText();
-});
 
 requestAnimationFrame(moveTime);
